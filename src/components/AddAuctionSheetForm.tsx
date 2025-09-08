@@ -17,11 +17,18 @@ export function AddAuctionSheetForm() {
     lotNumber: "",
     make: "",
     model: "",
+    vehicleTypeDesignation: "",
     auctionHouseCode: "",
     vehicleRegistrationYear: "",
     mileageKm: "",
     overallGrade: "",
     startingPrice: "",
+    repairHistory: "",
+    oneOwner: "",
+    nonSmoking: "",
+    seatingCapacity: "",
+    engineType: "",
+    shakenExpiryDate: "",
     inspectorComments: "",
   });
 
@@ -34,6 +41,7 @@ export function AddAuctionSheetForm() {
         lotNumber: formData.lotNumber,
         make: formData.make,
         model: formData.model,
+        vehicleTypeDesignation: formData.vehicleTypeDesignation || undefined,
         auctionHouseCode: formData.auctionHouseCode || undefined,
         vehicleRegistrationYear: formData.vehicleRegistrationYear 
           ? parseInt(formData.vehicleRegistrationYear) 
@@ -41,6 +49,12 @@ export function AddAuctionSheetForm() {
         mileageKm: formData.mileageKm ? parseInt(formData.mileageKm) : undefined,
         overallGrade: formData.overallGrade || undefined,
         startingPrice: formData.startingPrice ? parseInt(formData.startingPrice) : undefined,
+        repairHistory: formData.repairHistory === "true" ? true : formData.repairHistory === "false" ? false : undefined,
+        oneOwner: formData.oneOwner === "true" ? true : formData.oneOwner === "false" ? false : undefined,
+        nonSmoking: formData.nonSmoking === "true" ? true : formData.nonSmoking === "false" ? false : undefined,
+        seatingCapacity: formData.seatingCapacity ? parseInt(formData.seatingCapacity) : undefined,
+        engineType: formData.engineType || undefined,
+        shakenExpiryDate: formData.shakenExpiryDate || undefined,
         inspectorComments: formData.inspectorComments || undefined,
         equipmentAc: true,
         isExportEligible: true,
@@ -51,11 +65,18 @@ export function AddAuctionSheetForm() {
         lotNumber: "",
         make: "",
         model: "",
+        vehicleTypeDesignation: "",
         auctionHouseCode: "",
         vehicleRegistrationYear: "",
         mileageKm: "",
         overallGrade: "",
         startingPrice: "",
+        repairHistory: "",
+        oneOwner: "",
+        nonSmoking: "",
+        seatingCapacity: "",
+        engineType: "",
+        shakenExpiryDate: "",
         inspectorComments: "",
       });
       
@@ -183,6 +204,98 @@ export function AddAuctionSheetForm() {
                 onChange={(e) => handleChange("startingPrice", e.target.value)}
                 min="0"
                 placeholder="1500000"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="vehicleType">Vehicle Type Designation</Label>
+              <Input
+                id="vehicleType"
+                value={formData.vehicleTypeDesignation}
+                onChange={(e) => handleChange("vehicleTypeDesignation", e.target.value)}
+                placeholder="e.g., 6BA-KF5P"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="seating">Seating Capacity</Label>
+              <Select value={formData.seatingCapacity} onValueChange={(value) => handleChange("seatingCapacity", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select seats" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="2">2 seats</SelectItem>
+                  <SelectItem value="4">4 seats</SelectItem>
+                  <SelectItem value="5">5 seats</SelectItem>
+                  <SelectItem value="7">7 seats</SelectItem>
+                  <SelectItem value="8">8 seats</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label htmlFor="engineType">Engine Type</Label>
+              <Select value={formData.engineType} onValueChange={(value) => handleChange("engineType", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select engine type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Gasoline">Gasoline</SelectItem>
+                  <SelectItem value="Hybrid">Hybrid</SelectItem>
+                  <SelectItem value="e:HEV">e:HEV</SelectItem>
+                  <SelectItem value="EV">Electric</SelectItem>
+                  <SelectItem value="Turbo">Turbo</SelectItem>
+                  <SelectItem value="Diesel">Diesel</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label htmlFor="repairHistory">Repair History (修復歴)</Label>
+              <Select value={formData.repairHistory} onValueChange={(value) => handleChange("repairHistory", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select repair history" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="false">No (修復歴無)</SelectItem>
+                  <SelectItem value="true">Yes (修復歴有)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label htmlFor="oneOwner">One Owner</Label>
+              <Select value={formData.oneOwner} onValueChange={(value) => handleChange("oneOwner", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="One owner?" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="true">Yes</SelectItem>
+                  <SelectItem value="false">No</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label htmlFor="nonSmoking">Non-Smoking Vehicle</Label>
+              <Select value={formData.nonSmoking} onValueChange={(value) => handleChange("nonSmoking", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Non-smoking?" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="true">Yes</SelectItem>
+                  <SelectItem value="false">No</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label htmlFor="shakenExpiry">Shaken Expiry Date</Label>
+              <Input
+                id="shakenExpiry"
+                type="date"
+                value={formData.shakenExpiryDate}
+                onChange={(e) => handleChange("shakenExpiryDate", e.target.value)}
               />
             </div>
           </div>

@@ -13,7 +13,7 @@ export default function Home() {
   let auctionSheets;
   
   try {
-    auctionSheets = useQuery(api.auctionSheets.list);
+    auctionSheets = useQuery(api.auctionSheets.listAll);
   } catch (error) {
     console.log("Convex not connected, using mock data");
     auctionSheets = mockData;

@@ -16,9 +16,12 @@ export default function SearchPage() {
   const [selectedAuctionHouse, setSelectedAuctionHouse] = useState("");
   const [makeFilter, setMakeFilter] = useState("");
   const [modelFilter, setModelFilter] = useState("");
+  const [repairHistoryFilter, setRepairHistoryFilter] = useState("");
+  const [oneOwnerFilter, setOneOwnerFilter] = useState("");
+  const [engineTypeFilter, setEngineTypeFilter] = useState("");
 
   // Get all auction sheets for filtering
-  const allAuctionSheets = useQuery(api.auctionSheets.list);
+  const allAuctionSheets = useQuery(api.auctionSheets.listAll);
   
   // Get filtered results based on make/model
   const filteredResults = useQuery(api.auctionSheets.getByMakeModel, {
@@ -28,16 +31,20 @@ export default function SearchPage() {
 
   const results = filteredResults || allAuctionSheets || [];
 
-  // Further filter results based on grade and auction house
+  // Further filter results based on all filters
   const finalResults = results.filter(sheet => {
     if (selectedGrade && sheet.overallGrade !== selectedGrade) return false;
     if (selectedAuctionHouse && sheet.auctionHouseCode !== selectedAuctionHouse) return false;
+    if (repairHistoryFilter && sheet.repairHistory !== (repairHistoryFilter === "true")) return false;
+    if (oneOwnerFilter && sheet.oneOwner !== (oneOwnerFilter === "true")) return false;
+    if (engineTypeFilter && sheet.engineType !== engineTypeFilter) return false;
     if (searchTerm) {
       const searchLower = searchTerm.toLowerCase();
       return (
         sheet.make?.toLowerCase().includes(searchLower) ||
         sheet.model?.toLowerCase().includes(searchLower) ||
         sheet.lotNumber?.toLowerCase().includes(searchLower) ||
+        sheet.vehicleTypeDesignation?.toLowerCase().includes(searchLower) ||
         sheet.inspectorComments?.toLowerCase().includes(searchLower)
       );
     }
@@ -61,6 +68,9 @@ export default function SearchPage() {
     setSelectedAuctionHouse("");
     setMakeFilter("");
     setModelFilter("");
+    setRepairHistoryFilter("");
+    setOneOwnerFilter("");
+    setEngineTypeFilter("");
   };
 
   return (
@@ -145,6 +155,52 @@ export default function SearchPage() {
                     <SelectItem value="JAA">JAA</SelectItem>
                     <SelectItem value="HAA">HAA</SelectItem>
                     <SelectItem value="MOTA">MOTA</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label>Repair History (修復歴)</Label>
+                <Select value={repairHistoryFilter} onValueChange={setRepairHistoryFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Any repair history" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Any repair history</SelectItem>
+                    <SelectItem value="false">No Repair History (修復歴無)</SelectItem>
+                    <SelectItem value="true">Has Repair History (修復歴有)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label>One Owner</Label>
+                <Select value={oneOwnerFilter} onValueChange={setOneOwnerFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Any owner count" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Any owner count</SelectItem>
+                    <SelectItem value="true">One Owner Only</SelectItem>
+                    <SelectItem value="false">Multiple Owners</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label>Engine Type</Label>
+                <Select value={engineTypeFilter} onValueChange={setEngineTypeFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Any engine type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">Any engine type</SelectItem>
+                    <SelectItem value="Gasoline">Gasoline</SelectItem>
+                    <SelectItem value="Hybrid">Hybrid</SelectItem>
+                    <SelectItem value="e:HEV">e:HEV</SelectItem>
+                    <SelectItem value="EV">Electric</SelectItem>
+                    <SelectItem value="Turbo">Turbo</SelectItem>
+                    <SelectItem value="Diesel">Diesel</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

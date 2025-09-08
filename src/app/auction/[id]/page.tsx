@@ -128,6 +128,12 @@ export default function AuctionDetailPage({ params }: AuctionDetailPageProps) {
                     <p className="text-lg">{auctionSheet.vehicleRegistrationYear}</p>
                   </div>
                 )}
+                {auctionSheet.vehicleTypeDesignation && (
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Vehicle Type</p>
+                    <p className="text-lg">{auctionSheet.vehicleTypeDesignation}</p>
+                  </div>
+                )}
                 {auctionSheet.mileageKm && (
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Mileage</p>
@@ -140,13 +146,58 @@ export default function AuctionDetailPage({ params }: AuctionDetailPageProps) {
                     <p className="text-lg">{auctionSheet.fuelType}</p>
                   </div>
                 )}
+                {auctionSheet.engineType && (
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Engine Type</p>
+                    <p className="text-lg">{auctionSheet.engineType}</p>
+                  </div>
+                )}
                 {auctionSheet.driveType && (
                   <div>
                     <p className="text-sm font-medium text-muted-foreground">Drive Type</p>
                     <p className="text-lg">{auctionSheet.driveType}</p>
                   </div>
                 )}
+                {auctionSheet.seatingCapacity && (
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground">Seating</p>
+                    <p className="text-lg">{auctionSheet.seatingCapacity} seats</p>
+                  </div>
+                )}
               </div>
+              
+              {/* Vehicle Dimensions */}
+              {(auctionSheet.vehicleLength || auctionSheet.vehicleWidth || auctionSheet.vehicleHeight || auctionSheet.vehicleWeight) && (
+                <div className="mt-6 pt-4 border-t">
+                  <h4 className="text-md font-semibold mb-3">Dimensions & Weight</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {auctionSheet.vehicleLength && (
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Length</p>
+                        <p className="text-lg">{auctionSheet.vehicleLength} mm</p>
+                      </div>
+                    )}
+                    {auctionSheet.vehicleWidth && (
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Width</p>
+                        <p className="text-lg">{auctionSheet.vehicleWidth} mm</p>
+                      </div>
+                    )}
+                    {auctionSheet.vehicleHeight && (
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Height</p>
+                        <p className="text-lg">{auctionSheet.vehicleHeight} mm</p>
+                      </div>
+                    )}
+                    {auctionSheet.vehicleWeight && (
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Weight</p>
+                        <p className="text-lg">{auctionSheet.vehicleWeight} kg</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 
@@ -168,23 +219,41 @@ export default function AuctionDetailPage({ params }: AuctionDetailPageProps) {
                     </Badge>
                   </div>
                 )}
-                {auctionSheet.exteriorGrade && (
+                {(auctionSheet.exteriorGrade || auctionSheet.exteriorScore) && (
                   <div className="text-center">
                     <p className="text-sm font-medium text-muted-foreground">Exterior</p>
                     <Badge variant="outline" className="text-xl px-3 py-1 mt-2">
-                      {auctionSheet.exteriorGrade}
+                      {auctionSheet.exteriorGrade || auctionSheet.exteriorScore}
                     </Badge>
+                    {auctionSheet.exteriorScore && auctionSheet.exteriorGrade && (
+                      <p className="text-xs text-muted-foreground mt-1">Score: {auctionSheet.exteriorScore}</p>
+                    )}
                   </div>
                 )}
-                {auctionSheet.interiorGrade && (
+                {(auctionSheet.interiorGrade || auctionSheet.interiorScore) && (
                   <div className="text-center">
                     <p className="text-sm font-medium text-muted-foreground">Interior</p>
                     <Badge variant="outline" className="text-xl px-3 py-1 mt-2">
-                      {auctionSheet.interiorGrade}
+                      {auctionSheet.interiorGrade || auctionSheet.interiorScore}
                     </Badge>
+                    {auctionSheet.interiorScore && auctionSheet.interiorGrade && (
+                      <p className="text-xs text-muted-foreground mt-1">Score: {auctionSheet.interiorScore}</p>
+                    )}
                   </div>
                 )}
               </div>
+              
+              {/* Additional Scores */}
+              {auctionSheet.engineScore && (
+                <div className="mt-4 pt-4 border-t">
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-muted-foreground">Engine Score</p>
+                    <Badge variant="outline" className="text-lg px-3 py-1 mt-1">
+                      {auctionSheet.engineScore}
+                    </Badge>
+                  </div>
+                </div>
+              )}
               
               {auctionSheet.totalDefectCount !== undefined && (
                 <div className="mt-4 pt-4 border-t">
@@ -211,15 +280,70 @@ export default function AuctionDetailPage({ params }: AuctionDetailPageProps) {
                 {auctionSheet.equipmentSr && <Badge variant="outline">Sunroof</Badge>}
                 {auctionSheet.equipmentAw && <Badge variant="outline">Alloy Wheels</Badge>}
                 {auctionSheet.equipmentNav && <Badge variant="outline">Navigation</Badge>}
+                {auctionSheet.equipmentTv && <Badge variant="outline">TV</Badge>}
                 {auctionSheet.equipmentLeather && <Badge variant="outline">Leather Seats</Badge>}
                 {auctionSheet.equipmentBsm && <Badge variant="outline">BSM</Badge>}
                 {auctionSheet.equipmentRadarCruise && <Badge variant="outline">Radar Cruise</Badge>}
+                {auctionSheet.equipmentEtc && <Badge variant="outline">ETC</Badge>}
+                {auctionSheet.equipmentBackupCamera && <Badge variant="outline">Backup Camera</Badge>}
+                {auctionSheet.equipmentPushStart && <Badge variant="outline">Push Start</Badge>}
+                {auctionSheet.equipmentHidLights && <Badge variant="outline">HID Lights</Badge>}
+                {auctionSheet.equipmentParkingSensors && <Badge variant="outline">Parking Sensors</Badge>}
+                {auctionSheet.equipmentLaneKeepAssist && <Badge variant="outline">Lane Keep Assist</Badge>}
+                {auctionSheet.equipmentCollisionPrevention && <Badge variant="outline">Collision Prevention</Badge>}
               </div>
-              {!auctionSheet.equipmentAc && !auctionSheet.equipmentNav && !auctionSheet.equipmentPs && (
+              {!Object.values({
+                ac: auctionSheet.equipmentAc,
+                nav: auctionSheet.equipmentNav,
+                ps: auctionSheet.equipmentPs,
+                etc: auctionSheet.equipmentEtc,
+                camera: auctionSheet.equipmentBackupCamera,
+                push: auctionSheet.equipmentPushStart
+              }).some(Boolean) && (
                 <p className="text-muted-foreground">No equipment information available</p>
               )}
             </CardContent>
           </Card>
+
+          {/* Inspection & Special Features */}
+          {(auctionSheet.shakenExpiryDate || auctionSheet.repairHistory !== undefined || auctionSheet.oneOwner || auctionSheet.nonSmoking || auctionSheet.previousOwnerCount) && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Inspection & History</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {auctionSheet.shakenExpiryDate && (
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Shaken Expiry</p>
+                      <p className="text-lg">{new Date(auctionSheet.shakenExpiryDate).toLocaleDateString()}</p>
+                    </div>
+                  )}
+                  {auctionSheet.repairHistory !== undefined && (
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Repair History</p>
+                      <Badge variant={auctionSheet.repairHistory ? "destructive" : "default"}>
+                        {auctionSheet.repairHistory ? "Yes (修復歴有)" : "No (修復歴無)"}
+                      </Badge>
+                    </div>
+                  )}
+                  {auctionSheet.previousOwnerCount && (
+                    <div>
+                      <p className="text-sm font-medium text-muted-foreground">Previous Owners</p>
+                      <p className="text-lg">{auctionSheet.previousOwnerCount}</p>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex gap-2 mt-4">
+                  {auctionSheet.oneOwner && <Badge variant="secondary">One Owner</Badge>}
+                  {auctionSheet.nonSmoking && <Badge variant="secondary">Non-Smoking</Badge>}
+                  {auctionSheet.hasServiceRecords && <Badge variant="secondary">Service Records Available</Badge>}
+                  {auctionSheet.recallStatus && <Badge variant="secondary">Recalls Addressed</Badge>}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Comments */}
           {(auctionSheet.inspectorComments || auctionSheet.sellerComments || auctionSheet.additionalNotes) && (
@@ -321,6 +445,30 @@ export default function AuctionDetailPage({ params }: AuctionDetailPageProps) {
                     <MapPin className="mr-1 h-4 w-4" />
                     {auctionSheet.auctionLocation}
                   </p>
+                </div>
+              )}
+              {auctionSheet.cornerNumber && (
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Corner</p>
+                  <p className="text-lg">{auctionSheet.cornerNumber}</p>
+                </div>
+              )}
+              {auctionSheet.laneNumber && (
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Lane</p>
+                  <p className="text-lg">{auctionSheet.laneNumber}</p>
+                </div>
+              )}
+              {auctionSheet.auctionBlockTime && (
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Block Time</p>
+                  <p className="text-lg">{auctionSheet.auctionBlockTime}</p>
+                </div>
+              )}
+              {auctionSheet.sellerType && (
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Seller Type</p>
+                  <p className="text-lg">{auctionSheet.sellerType}</p>
                 </div>
               )}
             </CardContent>
