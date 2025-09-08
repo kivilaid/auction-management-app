@@ -197,4 +197,58 @@ export default defineSchema({
       searchField: "make",
       filterFields: ["model", "overallGrade", "auctionHouseCode", "auctionStatus", "repairHistory", "oneOwner", "sellerType", "engineType"]
     }),
+
+  // Extraction jobs tracking
+  extractionJobs: defineTable({
+    auctionUrl: v.string(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("processing"),
+      v.literal("completed"),
+      v.literal("failed")
+    ),
+    errorMessage: v.optional(v.string()),
+    auctionSheetId: v.optional(v.id("auctionSheets")),
+    extractedAt: v.optional(v.number()),
+    htmlContent: v.optional(v.string()), // Store HTML for debugging
+    aiResponse: v.optional(v.string()), // Store AI response for debugging
+    retryCount: v.optional(v.number()),
+    
+    // Additional metadata
+    userAgent: v.optional(v.string()),
+    requestedBy: v.optional(v.string()),
+    priority: v.optional(v.number()), // For job queue prioritization
+  })
+    .index("by_status", ["status"])
+    .index("by_url", ["auctionUrl"])
+    .index("by_auction_sheet", ["auctionSheetId"])
+    .index("by_created_time", ["_creationTime"])
+    .index("by_status_priority", ["status", "priority"]),
+
+  // Stored images from auction sheets
+  auctionImages: defineTable({
+    auctionSheetId: v.id("auctionSheets"),
+    storageId: v.id("_storage"), // Convex file storage ID
+    imageType: v.union(
+      v.literal("auction_sheet"), // Main auction sheet image
+      v.literal("vehicle_photo"), // Vehicle exterior/interior photos
+      v.literal("defect_diagram"), // Defect diagram/markup
+      v.literal("document") // Additional documents
+    ),
+    originalUrl: v.string(), // Original URL from auction site
+    filename: v.optional(v.string()),
+    mimeType: v.optional(v.string()),
+    fileSize: v.optional(v.number()),
+    width: v.optional(v.number()),
+    height: v.optional(v.number()),
+    extractedAt: v.number(),
+    
+    // Image metadata
+    description: v.optional(v.string()),
+    position: v.optional(v.number()), // Order/position if multiple images
+  })
+    .index("by_auction_sheet", ["auctionSheetId"])
+    .index("by_image_type", ["imageType"])
+    .index("by_extracted_time", ["extractedAt"])
+    .index("by_storage_id", ["storageId"]),
 });
