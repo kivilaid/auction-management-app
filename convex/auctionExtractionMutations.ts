@@ -189,7 +189,7 @@ export const createAuctionSheet = internalMutation({
       bidCount: data.bid_count,
       winningBidderLocation: data.winning_bidder_location,
       saleDate: data.sale_date,
-      auctionSheetImageUrl: sourceUrl, // Store the source URL
+      auctionSheetImageUrl: args.sourceUrl, // Store the source URL
       dataSource: "ai_extraction",
       qualityScore: 8, // High quality since it's AI extracted
     };
@@ -250,7 +250,7 @@ export const scheduleAuctionExtraction = mutation({
     priority: v.optional(v.number()),
     requestedBy: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{success: boolean; jobId?: any; auctionSheetId?: any; message: string; alreadyExists?: boolean; inProgress?: boolean}> => {
     // Check if URL is already being processed or completed
     const existingJob = await ctx.db
       .query("extractionJobs")
@@ -305,17 +305,18 @@ export const getExtractionJobs = query({
     )),
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("extractionJobs");
+    let jobs;
     
     if (args.status) {
-      query = query.withIndex("by_status", (q) => q.eq("status", args.status));
+      jobs = await ctx.db.query("extractionJobs")
+        .filter((q) => q.eq(q.field("status"), args.status))
+        .order("desc")
+        .take(args.limit || 50);
     } else {
-      query = query.withIndex("by_created_time");
+      jobs = await ctx.db.query("extractionJobs")
+        .order("desc")
+        .take(args.limit || 50);
     }
-    
-    const jobs = await query
-      .order("desc")
-      .take(args.limit || 50);
     
     // Include auction sheet data for completed jobs
     const jobsWithSheets = await Promise.all(

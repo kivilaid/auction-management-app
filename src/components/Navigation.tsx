@@ -10,6 +10,8 @@ const navigation = [
   { name: "All Sheets", href: "/sheets", icon: "📋" },
   { name: "Manage", href: "/manage", icon: "➕" },
   { name: "Search", href: "/search", icon: "🔍" },
+  { name: "AI Extraction", href: "/admin/extraction", icon: "🤖" },
+  { name: "Monitoring", href: "/admin/monitoring", icon: "📊" },
 ];
 
 export function Navigation() {

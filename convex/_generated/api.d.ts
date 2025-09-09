@@ -16,6 +16,8 @@ import type {
 import type * as auctionExtraction from "../auctionExtraction.js";
 import type * as auctionExtractionMutations from "../auctionExtractionMutations.js";
 import type * as auctionSheets from "../auctionSheets.js";
+import type * as extractionJobProcessor from "../extractionJobProcessor.js";
+import type * as extractionJobProcessorMutations from "../extractionJobProcessorMutations.js";
 import type * as openai from "../openai.js";
 import type * as sampleData from "../sampleData.js";
 
@@ -31,6 +33,8 @@ declare const fullApi: ApiFromModules<{
   auctionExtraction: typeof auctionExtraction;
   auctionExtractionMutations: typeof auctionExtractionMutations;
   auctionSheets: typeof auctionSheets;
+  extractionJobProcessor: typeof extractionJobProcessor;
+  extractionJobProcessorMutations: typeof extractionJobProcessorMutations;
   openai: typeof openai;
   sampleData: typeof sampleData;
 }>;

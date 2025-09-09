@@ -222,7 +222,6 @@ export default defineSchema({
     .index("by_status", ["status"])
     .index("by_url", ["auctionUrl"])
     .index("by_auction_sheet", ["auctionSheetId"])
-    .index("by_created_time", ["_creationTime"])
     .index("by_status_priority", ["status", "priority"]),
 
   // Stored images from auction sheets

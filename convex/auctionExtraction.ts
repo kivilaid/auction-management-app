@@ -12,7 +12,13 @@ export const extractAuctionData = action({
     priority: v.optional(v.number()),
     requestedBy: v.optional(v.string()),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{
+    success: boolean;
+    jobId?: any;
+    auctionSheetId?: any;
+    message: string;
+    error?: string;
+  }> => {
     console.log(`Starting auction data extraction for: ${args.auctionUrl}`);
     
     // Create extraction job record
@@ -161,7 +167,7 @@ export const retryFailedJob = action({
     username: v.string(),
     password: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<any> => {
     const job = await ctx.runQuery(internal.auctionExtractionMutations.getExtractionJob, {
       jobId: args.jobId,
     });
@@ -201,7 +207,7 @@ async function fetchAuctionPage(url: string, username: string, password: string)
       'DNT': '1',
       'Connection': 'keep-alive',
       'Upgrade-Insecure-Requests': '1',
-      'Authorization': `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`,
+      'Authorization': `Basic ${btoa(`${username}:${password}`)}`,
     },
     redirect: 'follow',
   });
@@ -311,7 +317,7 @@ async function downloadImageWithAuth(url: string, username: string, password: st
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
       'Accept-Language': 'en-US,en;q=0.9,ja;q=0.8',
-      'Authorization': `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`,
+      'Authorization': `Basic ${btoa(`${username}:${password}`)}`,
       'Referer': url.split('/').slice(0, 3).join('/'),
     },
   });
